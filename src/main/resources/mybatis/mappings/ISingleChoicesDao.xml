@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.ISingleChoicesDao">
+	<!-- 插入单选题选项  -->
+	<insert id="insert"> 
+		insert into t_singlechoices(singleChoice_id,singleChoice_choice)
+		 VALUES(#{singleChoice_id},#{singleChoice_choice})
+	</insert>
+	
+	<!-- 根据选项的内容 查询选项id -->
+	<select id="select" resultType="SingleChoices">
+		select singleChoices_id,singleChoice_id,singleChoice_choice from t_singlechoices 
+		where singleChoice_choice = #{singleChoice_choice}
+	</select>
+</mapper>

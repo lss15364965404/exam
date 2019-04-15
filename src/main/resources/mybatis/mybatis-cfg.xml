@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 告诉MyBaties框架关于数据库的配置信息  当使用spring，该部分功能将不在这里使用-->
+	<!-- <properties resource="jdbc.properties"></properties> -->
+	
+	
+	<!-- <environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				一下变量信息来自jdbc.properties
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments> -->
+	
+	<!--  扫描包 该功能还可以在这里使用，但个人觉得没用-->
+	<!-- <typeAliases>
+		<package name="com.ychs.bean"/>
+	</typeAliases> -->
+	<!-- 扫面mapping -->
+	<!-- <mappers>
+		<package name="com.ychs.dao"/>
+	</mappers> -->
+</configuration>

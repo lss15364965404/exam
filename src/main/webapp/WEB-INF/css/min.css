@@ -1,0 +1,75 @@
+/* CSS Document */
+
+.clearfix:after
+{
+content:".";
+display:block;
+height:0;
+clear:both;
+visibility:hidden;
+}
+.clearfix
+{
+display:inline-block;
+}
+/* Hide from IE Mac */
+.clearfix {display:block;}
+/* End hide from IE Mac */
+/* end of clearfix */
+
+
+a{text-decoration:none;font-family:"Î¢ÈíÑÅºÚ"}
+.wrapper { width:100%; margin:0 auto;}
+.wrapper .inner {margin:0 auto;} 
+
+.box {width:1140px;margin:0 auto}
+img{ display: block; border:none;}
+img {
+    vertical-align: middle;
+}
+
+ul, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#webhead {margin:0px auto;background:#f3f8fd; width:100%;height:150px}
+#webhead #logo {width:1020px;margin:0px auto;}
+#logo img{float:left;padding-top:35px}
+.clearfix:after{clear: both;content: ".";display: block;height: 0;visibility: hidden;}
+.clearfix{display: block; *zoom:1;}
+
+
+
+#webmenu {width:70%;margin:0px auto;height:68px;}
+#webmenu ul {margin:0 auto;width:930px;}
+#webmenu li {float:left;font-size:16px;color:#FFFFFF;position:relative;text-align:center;line-height:100px;list-style:none}
+#webmenu a:link,#webmenu a:visited {color:#FFFFFF;width:100px;display:block;}
+#webmenu a:hover {color:#FFFFFF;font-weight:bold;display:block;background: #1983cd}
+#webmenu .navigation_english { float:left; line-height:100px; text-align:center;width:100px }
+
+
+#webmenu li div a:link,#webmenu li div a:visited{ display:block; text-decoration:none; color:#FFFFFF; width:114px; height:34px; line-height:34px; text-align:left;}
+#webmenu li div a:hover{color:#FFFFFF; background:#1983cd; text-decoration:none;}
+#webmenu li div{padding-left:20px;display:none; position:absolute; top:100px; left:0; width:114px;border: 1px solid #2699d0;border-left: 6px solid #45b0e3; background: #1983cd;}
+#webmenu li {z-index:9999999;}
+
+
+.footer{background:#1b1e25;}
+.footer .box{height:175px;background:url(footer.png) no-repeat left;overflow:hidden}
+.footer_c{margin-top:85px;margin-left:25px}
+.footer p{font-size:14px;color:#FFFFFF;width:60%;line-height:30px;height:30px;margin:0px ;padding:0px}
+
+
+
+	#page {width:100%;padding:55px 0;float:left}
+    #pagetop {width:100%;padding:3px 0;}
+	#pagetop ul,#page ul{margin:0 auto 5px auto; display:table;text-align:center;}
+	#pagetop li,#page li{float:left;*float:none;line-height:21px;height:21px;margin: 2px;display:inline; zoom:1;}
+	#pagetop span,#page span{display: block; padding: 2px 5px; background: #F5FBFF; border: 1px solid #CCC; color: #999999; }
+	#pagetop a,#page a{font-size:12px;display: block; text-decoration: none; margin:0px; color: #135C86;padding: 2px 5px 2px 5px;background:url(css8/title_bg.gif) repeat-x;}
+	#pagetop a:link,#pagetop a:visited,#page a:link,#page a:visited {border: 1px solid #CCCCCC; }
+	#pagetop a:hover,#page a:hover {background:#F5FBFF;color:#21668D;}
+	#pagetop #span1,#page #span1 {background:#FFFFFF;display: block;}
+

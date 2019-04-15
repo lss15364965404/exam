@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IStudentDao">
+	<!-- 插入用户数据  -->
+	<insert id="insert">
+		INSERT INTO t_student(class_id,student_name) VALUES(#{class_id},#{student_name});
+	</insert>
+	
+	<!-- 根据条件查询用户数据 -->
+	<select id="selectStudentByCondition" resultType="StudentAndUser">
+		SELECT t.student_id,t.student_name,u.user_id,u.username,u.`password`,u.role_id,u.role
+		FROM t_student t,t_user u WHERE t.student_name = u.user_name
+		<if test="username != null and username != '%%'">
+			and u.username like #{username}
+		</if>
+		<if test="page != null and page !='' and limit != null and limit !=''">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(student_name) as num from t_student;
+	</select>
+</mapper>

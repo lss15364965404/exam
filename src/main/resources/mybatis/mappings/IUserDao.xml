@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IUserDao">
+	<!-- 插入用户数据  -->
+	<insert id="insert"> 
+		INSERT INTO t_user(username,password,role,role_id,user_name) VALUES(#{username},#{password},#{role},#{role_id},#{user_name});
+	</insert>
+	
+	<!-- 修改用户密码  --> 
+	<update id="updatePassword"> 
+		update t_user SET `password` = #{password_last} WHERE username = #{username} AND `password` = #{password};
+	</update>
+	
+	<!-- 根据条件查询用户数据 -->
+	<select id="selectUserByCondition" resultType="User">
+		SELECT u.user_id,u.username,u.`password`,u.role,u.role_id 
+		FROM t_user u,t_role r where u.role_id = r.ID
+		<if test="username != null and username != ''">
+			and username = #{username}
+		</if>
+		<if test="password != null and password != ''">
+			and password = #{password}
+		</if>
+		<if test="role != null and role !=''">
+			and role = #{role}
+		</if>
+		<if test="role_id != null and role_id !=''">
+			and role_id = #{role_id}
+		</if>
+		<if test="page != null and page !='' and limit != null and limit !=''">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(role_id) as num from t_user;
+	</select>
+</mapper>

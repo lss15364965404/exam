@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 扫描以下的包 -->
+	<context:component-scan base-package="com.ychs"/>
+	
+	<!-- 引入jdbc 的配置文件，为数据源做准备 -->
+	<context:property-placeholder location="classpath:pro/jdbc.properties"
+	system-properties-mode="FALLBACK"/>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${driver}"/>   <!-- driverClassName是源码下的类 -->
+		<property name="url" value="${url}"/>
+		<property name="username" value="${username}"/>
+		<property name="password" value="${password}"/>
+	</bean>
+	
+	<!-- sqlSessionFactory  是Spring和MyBatis的桥梁，中间件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:mybatis/mybatis-cfg.xml"></property>
+		<!-- <property name="mapperLocations" value="classp ath*:com/ssm/sts/dao/*.xml"/> -->
+	</bean>
+	
+    <!-- SpringMVC文件上传 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--defaultEncoding：请求的编码格式必须和用户JSP的编码一致，以便正确读取表单中的内容。   
+            uploadTempDir:文件上传过程中的临时目录，上传完成后，临时文件会自动删除   
+            maxUploadSize:设置文件上传大小上限（单位为字节） -->  
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="maxUploadSize" value="102400000" />
+        <!--uploadTempDir可以不做设置，有默认的路径，上传完毕会临时文件会自动被清理掉   
+        <property name="uploadTempDir" value="upload/temp"></property> -->  
+    </bean>
+	
+	<!-- 因为MyBatis 不在关注事务，所以此处要配置spring的事务 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 配置事务管理类对哪些方法进行事务管理，执行以下方法时，开启事务，提交事务和回滚事务 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+		 	<!-- 当Spring监听到add方法执行时，启动事务，如果add方法正常完成，则提交事务 -->
+			<tx:method name="adsd" rollback-for="java.long.Exception"/>
+			<!-- <tx:method name="addSingleChoice" rollback-for="java.long.Exception"/>
+			<tx:method name="add*" rollback-for="java.long.Exception"/>
+			<tx:method name="add1" rollback-for="java.long.Exception"/>
+			<tx:method name="ints" rollback-for="java.long.Exception"/> -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- Spring 要想完成监听方法的执行，并且用事务管理，就要到AOP技术进行监听 -->
+	<aop:config>
+		<!-- AOP所要监听的方法的点的特性描述 -->
+		<aop:pointcut expression="execution(* com.ychs.service.*.*(..))" id="pc"/>
+		<!-- AOP的通知，把切点方法和事务管理联系到一起 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pc"/>
+	</aop:config>
+
+</beans>

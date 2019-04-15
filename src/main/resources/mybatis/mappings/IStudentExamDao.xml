@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IStudentExamDao">
+
+	<!-- 查询全部试卷信息 -->
+	<select id="selectPapers" resultType="Paper">
+		select paper_id,teacher_id,paper_name,singleChoice_num,singleChoice_ids,singleChoice_answers,singleChoice_score,check_num,check_ids,check_answers,check_score,
+		fillBlank_num,fillBlank_ids,fillBlank_answers,fillBlank_score,multipleChoice_num,multipleChoice_ids,multipleChoice_answers,multipleChoice_score from t_paper;
+	</select>
+	
+	<!-- 通过指定id查询指点试卷 -->
+	<select id="selectPaper" resultType="Paper">
+		select paper_id,teacher_id,paper_name,singleChoice_num,singleChoice_ids,singleChoice_answers,singleChoice_score,check_num,check_ids,check_answers,check_score,
+		fillBlank_num,fillBlank_ids,fillBlank_answers,fillBlank_score,multipleChoice_num,multipleChoice_ids,multipleChoice_answers,multipleChoice_score from t_paper
+		where paper_id=#{paper_id} 
+	</select>
+	
+	<!-- 通过单选题id查询单选题对象(不包括选项) -->
+	<select id="selectSingleChoice" resultType="SingleChoice">
+		select singleChoice_id,teacher_id,singleChoice_question,singleChoiceAnswer_id,singleChoice_stage,singleChoice_useNum,singleChoice_rightNum,singleChoice_accuracy from t_singlechoice
+		where singleChoice_id=#{singleChoice_id};
+	</select>
+	
+	<!-- 通过通过单选题选项id查询单选题选项  singleChoice_id为单选题id -->
+	<select id="selectSingleChoices" resultType="SingleChoices">
+		select singleChoices_id,singleChoice_id,singleChoice_choice from t_singlechoices
+		where singleChoice_id=#{singleChoice_id};
+	</select>
+	
+	<!-- 修改单选题的使用次数、正确次数、正确率 -->
+	<update id="updateSingleChoice">
+		update t_singlechoice set singleChoice_useNum=#{new_useNum},singleChoice_rightNum=#{new_rightNum},singleChoice_accuracy=#{new_accuracy} 
+		where singleChoice_id=#{singleChoice_id};
+	</update>
+	
+	<!-- 通过判断题id查询判断题 -->
+	<select id="selectCheck" resultType="Check">
+		select check_id,teacher_id,check_question,check_answer,check_stage,check_useNum,check_rightNum,check_accuracy from t_check
+		where check_id = #{check_id};
+	</select>
+	
+	<!-- 修改判断题的使用次数、正确率 -->
+	<update id="updateCheck">
+		update t_check set check_useNum = #{new_useNum},check_rightNum=#{new_rightNum},check_accuracy=#{new_accuracy} 
+		where check_id = #{check_id};
+	</update>
+	
+	<!-- 向学生答题结果表中添加学生答题结果 -->
+	<insert id="insertTestResult">
+		insert into t_testresult(paper_id,student_id,studentSingleChoice_answers,studentCheck_answers,studentFillBlank_answers,studentMultipleChoice_answers,testResult_grade) 
+		values (#{paper_id},#{student_id},#{studentSingleChoice_answers},#{studentCheck_answers},#{studentFillBlank_answers},#{studentMultipleChoice_answers},#{testResult_grade});
+	</insert>
+	
+	<!-- 查询指定学生id做过的所有试卷的结果集 -->
+	<select id="selectTestResults" resultType="TestResult">
+		select testResult_id,paper_id,student_id,studentSingleChoice_answers,studentCheck_answers,studentFillBlank_answers,studentMultipleChoice_answers,testResult_grade from t_testresult
+		where student_id=#{student_id};
+	</select>
+	
+	<!-- 查询结果集中指定id的结果 -->
+	<select id="selectTestResult" resultType="TestResult">
+		select testResult_id,paper_id,student_id,studentSingleChoice_answers,studentCheck_answers,studentFillBlank_answers,studentMultipleChoice_answers,testResult_grade from t_testresult
+		where testResult_id=#{testResult_id};
+	</select>
+	
+	<!-- 通过多选题id查询多选题对象(不包括选项)  -->
+	<select id="selectMultipleChoice" resultType="MultipleChoice">
+		select multipleChoice_id,teacher_id,multipleChoice_question,multipleChoiceAnswer_ids,multipleChoice_stage,multipleChoice_useNum,multipleChoice_rightNum,multipleChoice_accuracy from t_multiplechoice
+		where multipleChoice_id=#{multipleChoice_id};
+	</select>
+	<!-- 通过多选题选项id查询多选题选项 -->
+	<select id="selectMultipleChoices" resultType="MultipleChoices">
+		select multipleChoices_id,multipleChoice_id,multipleChoice_choice 
+		from t_multiplechoices where multipleChoice_id = #{multipleChoice_id};
+	</select>
+	<!-- 修改多选题的使用次数、正确次数 正确率 -->	
+	<update id="updateMultipleChoice">
+		update t_multiplechoice set multipleChoice_useNum = #{multipleChoice_useNum},multipleChoice_rightNum = #{multipleChoice_rightNum},multipleChoice_accuracy = #{multipleChoice_accuracy} where multipleChoice_id = #{multipleChoice_id};
+	</update>
+	<!-- 通过填空题id查询填空题对象(不包括选项)  -->
+	<select id="selectFillBlank" resultType="FillBlank">
+		select fillBlank_id,teacher_id,fillBlank_question,fillBlank_answer,fillBlank_stage,fillBlank_useNum,fillBlank_rightNum,fillBlank_accuracy 
+		from t_fillblank where fillBlank_id = #{fillBlank_id};
+	</select>
+	<!-- 修改填空题 的使用次数 正确次数 正确率  -->
+	<update id="updateFillBlank">
+		update t_fillblank set fillBlank_useNum = #{fillBlank_useNum},fillBlank_rightNum = #{fillBlank_rightNum},fillBlank_accuracy = #{fillBlank_accuracy} 
+		where fillBlank_id = #{fillBlank_id};
+	</update>
+	
+</mapper>

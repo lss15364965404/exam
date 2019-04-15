@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IFillBlankDao">
+	<!-- 插入填空题  -->
+	<insert id="insert"> 
+		insert into t_fillBlank(teacher_id,fillBlank_question,fillBlank_answer,fillBlank_stage,fillBlank_useNum,fillBlank_rightNum,fillBlank_accuracy)	
+		 	values(#{teacher_id},#{fillBlank_question},#{fillBlank_answer},#{fillBlank_stage},#{fillBlank_useNum},#{fillBlank_rightNum},#{fillBlank_accuracy});
+	</insert>
+	
+	
+	
+	<!-- 根据条件查询填空题 -->
+	<select id="selectFkByCondition" resultType="FillBlank"> 
+		select f.teacher_id,t.teacher_name,f.fillBlank_id,f.fillBlank_question,f.fillBlank_answer,
+			f.fillBlank_stage,f.fillBlank_useNum,f.fillBlank_rightNum,f.fillBlank_accuracy from 
+			t_fillblank f,t_teacher t
+		where f.teacher_id = t.teacher_id 
+		<if test="stem != null and stem !=''">
+			and f.fillBlank_question like #{stem}
+		</if>
+		<if test="stage != null and stage !=''">
+			and f.fillBlank_stage like #{stage}
+		</if>
+		<if test="1 == 1">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(f.teacher_id) as num from t_fillblank f, t_teacher t where f.teacher_id = t.teacher_id
+	</select>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IPaperDao">
+	
+	<!-- 添加试卷基本信息 -->
+	<insert id="insert_paper">
+		INSERT INTO t_paper(teacher_id,paper_name,singleChoice_num,singleChoice_ids,
+		singleChoice_answers,singleChoice_score,check_num,check_ids,check_answers,
+		check_score,fillBlank_num,fillBlank_ids,fillBlank_answers,fillBlank_score,
+		multipleChoice_num,multipleChoice_ids,multipleChoice_answers,
+		multipleChoice_score) VALUES(#{teacher_id},#{paper_name},#{singleChoice_num},
+		#{singleChoice_ids},#{singleChoice_answers},#{singleChoice_score},#{check_num},
+		#{check_ids},#{check_answers},#{check_score},#{fillBlank_num},#{fillBlank_ids},
+		#{fillBlank_answers},#{fillBlank_score},#{multipleChoice_num},
+		#{multipleChoice_ids},#{multipleChoice_answers},#{multipleChoice_score})
+	</insert>
+	
+	
+	<!-- 条件查询试卷 -->
+	<select id="selectPaper" resultType="Paper">
+	select p.paper_id,t.teacher_id,t.teacher_name,p.paper_name,p.singleChoice_num,p.singleChoice_score,p.check_num,p.check_score
+	,p.fillBlank_num,p.fillBlank_score,p.multipleChoice_num,p.multipleChoice_score from t_teacher t
+	,t_paper p  
+		 where t.teacher_id = p.teacher_id
+			<if test="paperName!=null and paperName !=''">
+				and p.paper_name like #{paperName}
+			</if>
+			<if test="page != null and page !='' and limit != null and limit !=''">
+				limit #{page},#{limit}
+			</if>
+	</select>
+	
+	<!-- 查讯总条数 -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		select count(t.teacher_id) as num from t_teacher t,t_paper p where t.teacher_id = p.teacher_id
+		
+	</select>
+	
+	<!-- 修改试卷内的单选题信息 -->
+	<update id="update_paper_singleChoice">
+		UPDATE t_paper SET singleChoice_ids = #{singleChoice_ids},singleChoice_answers = #{singleChoice_answers} WHERE paper_id=#{paper_id};
+	</update>
+	<!-- 修改试卷内的判断题信息 -->
+	<update id="update_paper_check">
+		UPDATE t_paper SET check_ids = #{check_ids},check_answers = #{check_answers} WHERE paper_id=#{paper_id};
+	</update>
+	<!-- 修改试卷内的填空题信息 -->
+	<update id="update_paper_fillBlank">
+		UPDATE t_paper SET fillBlank_ids = #{fillBlank_ids},fillBlank_answers = #{fillBlank_answers} WHERE paper_id=#{paper_id};
+	</update>
+	<!-- 修改试卷内的多选题信息 -->
+	<update id="update_paper_multipleChoice">
+		UPDATE t_paper SET multipleChoice_ids = #{multipleChoice_ids},multipleChoice_answers = #{multipleChoice_answers} WHERE paper_id=#{paper_id};
+	</update>
+	
+	<!--  查询所有试卷信息 
+	<select id="select_paper" resultType="Paper">
+		SELECT paper_id,teacher_id,paper_name,singleChoice_num,singleChoice_ids,singleChoice_answers,singleChoice_score,check_num,check_ids,check_answers,check_score,fillBlank_num,fillBlank_ids,fillBlank_answers,fillBlank_score,multipleChoice_num,multipleChoice_ids,multipleChoice_answers,multipleChoice_score from t_paper 
+	</select> -->
+	
+	<!-- 查询指定老师的试卷信息 -->
+	<select id="select_paperByTeacherId" resultType="Paper">
+		SELECT paper_id,teacher_id,paper_name,singleChoice_num,singleChoice_ids,singleChoice_answers,singleChoice_score,check_num,check_ids,check_answers,check_score,fillBlank_num,fillBlank_ids,fillBlank_answers,fillBlank_score,multipleChoice_num,multipleChoice_ids,multipleChoice_answers,multipleChoice_score from t_paper teacher_id = #{teacher_id}
+	</select>
+	
+	<!-- 查询试卷信息,通过试卷名 -->
+	<select id="select_paperByPaperName" resultType="Paper">
+		SELECT paper_id,teacher_id,paper_name,singleChoice_num,singleChoice_ids,singleChoice_answers,singleChoice_score,check_num,check_ids,check_answers,check_score,fillBlank_num,fillBlank_ids,fillBlank_answers,fillBlank_score,multipleChoice_num,multipleChoice_ids,multipleChoice_answers,multipleChoice_score from t_paper paper_name = #{paper_name}
+	</select>
+
+	<!-- 查询试卷中的选择题信息 -->
+	<select id="select_paper_singleChoice" resultType="Paper">
+		SELECT singleChoice_question,singleChoice_stage,singleChoice_useNum,singleChoice_accuracy FROM t_singlechoice;
+	</select>
+
+	
+
+</mapper>

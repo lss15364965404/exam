@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IMultipleChoicesDao">
+	<!-- 插入多选题  -->
+	<insert id="insert"> 
+		insert into t_multiplechoices(multipleChoice_id,multipleChoice_choice)
+		VALUES(#{multipleChoice_id},#{multipleChoice_choice})
+	</insert>
+	<!-- 查询多选题选项 -->
+	<select id="select" resultType="MultipleChoices">
+		select multipleChoices_id,multipleChoice_id,multipleChoice_choice from t_multiplechoices
+		where multipleChoice_choice = #{multipleChoice_choice};
+	</select>
+</mapper>

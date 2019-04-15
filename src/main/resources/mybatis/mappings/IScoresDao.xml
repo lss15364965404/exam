@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IScoresDao">
+	
+	
+	<!-- 根据条件查询学生成绩 -->
+	<!-- 试卷名、学生id、各题型的正确答案|学生答案 |题型分数、学生总成绩-->
+	<select id="selectStudentScoresByCondition" resultType="PaperStuRightStuScoGrade">
+		select t.testResult_id,p.paper_name,t.student_id,
+		p.singleChoice_answers,t.studentSingleChoice_answers,p.singleChoice_score,
+		p.check_answers,t.studentCheck_answers,p.check_score,
+		p.fillBlank_answers,t.studentFillBlank_answers,p.fillBlank_score,
+		p.multipleChoice_answers,t.studentMultipleChoice_answers,p.multipleChoice_score,
+		t.testResult_grade 
+		from t_testresult t,t_paper p 
+		where t.paper_id = p.paper_id 
+		<if test="student_id != 0">
+			and t.student_id = #{student_id}
+		</if>
+		<if test="paper_name != null and paper_name != '%%'">
+			and p.paper_name = #{paper_name}
+		</if>
+		<if test="page != null and page !='' and limit != null and limit !=''">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(t.student_id) as num from t_testresult t,t_student s
+		where t.student_id = s.student_id
+		<if test="student_id != 0">
+			and t.student_id = #{student_id}
+		</if>
+	</select>
+</mapper>

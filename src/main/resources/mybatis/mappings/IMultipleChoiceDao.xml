@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IMultipleChoiceDao">
+	<!-- 插入多选题  -->
+	<insert id="insert" > 
+		insert into t_MultipleChoice(teacher_id,multipleChoice_question,multipleChoiceAnswer_ids,
+		multipleChoice_stage,multipleChoice_useNum,multipleChoice_rightNum,multipleChoice_accuracy)
+		VALUES(#{teacher_id},#{multipleChoice_question},#{multipleChoiceAnswer_ids},
+		#{multipleChoice_stage},#{multipleChoice_useNum},#{multipleChoice_rightNum},#{multipleChoice_accuracy});
+	</insert>
+	
+	<!-- 根据条件查询多选题目 -->
+	<select id="selectMuByContion" resultType="MultipleChoiceAndTeacher">
+		select m.teacher_id,t.teacher_name,multipleChoice_id,multipleChoice_question,multipleChoiceAnswer_ids,
+		multipleChoice_stage,multipleChoice_useNum,multipleChoice_rightNum,
+		multipleChoice_accuracy,multipleChoice_id from t_MultipleChoice m ,
+		t_teacher t where t.teacher_ID = m.teacher_id 
+		<if test="stem != null and stem !=''">
+			and m.multipleChoice_question like #{stem} 
+		</if>
+		<if test="stage != null and stage !=''">
+			and m.multipleChoice_stage like #{stage}
+		</if>
+		<if test="1 == 1">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(m.teacher_id) as num from t_MultipleChoice m, t_teacher t where m.teacher_id = t.teacher_id
+	</select>
+	<!-- 修改多选题表  -->
+	<update id="update">
+		update t_multiplechoice set multipleChoiceAnswer_ids = #{multipleChoiceAnswer_ids} where multipleChoice_id = #{multipleChoice_id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.ISingleChoiceDao">
+	<!-- 插入单选题  -->
+	<insert id="insert"> 
+		insert into t_singlechoice(teacher_id,singleChoice_question,singleChoiceAnswer_id,
+		singleChoice_stage,singleChoice_useNum,singleChoice_rightNum,singleChoice_accuracy)
+		 VALUES(#{teacher_id},#{singleChoice_question},#{singleChoiceAnswer_id},
+		 #{singleChoice_stage},#{singleChoice_useNum},#{singleChoice_rightNum},
+		 #{singleChoice_accuracy})
+	</insert>
+	
+	<!-- 修改单选题 -->
+	<update id="update">
+		UPDATE t_singlechoice SET singleChoiceAnswer_id = #{singleChoiceAnswer_id} 
+		WHERE singleChoice_id = #{singleChoice_id}
+	</update>
+	<!-- 修改单选题 -->
+	<update id="updateRight">
+		UPDATE t_singlechoice SET singleChoiceRightAnswer_id = #{singleChoiceRightAnswer_id} 
+		WHERE singleChoice_id = #{singleChoice_id}
+	</update>
+	
+	<!-- 条件查询单选题 -->
+	<select id="selectSingleChoice" resultType="SingleChoiceAndTeacher">
+		select t.teacher_name,s.singleChoice_id,s.singleChoice_question,s.singleChoiceAnswer_id,sc.singleChoice_choice,s.singleChoice_stage,
+		s.singleChoice_useNum,s.singleChoice_rightNum,s.singleChoice_accuracy from t_singlechoice s,
+		t_teacher t,t_singlechoices sc where s.teacher_id = t.teacher_ID and s.singleChoiceRightAnswer_id = sc.singleChoices_id
+		<if test="singleChoice_question != null and singleChoice_question !=''">
+			and s.singleChoice_question = #{singleChoice_question}
+		</if>
+		<if test="stage != null and stage !=''">
+			and s.singleChoice_stage like #{stage}
+		</if>
+		<if test="1 == 1">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 条件查询单选题 -->
+	<select id="selectSingleChoiceAdd" resultType="SingleChoiceAndTeacher">
+		select t.teacher_name,s.singleChoice_id,s.singleChoice_question,s.singleChoiceAnswer_id,sc.singleChoice_choice,s.singleChoice_stage,
+		s.singleChoice_useNum,s.singleChoice_rightNum,s.singleChoice_accuracy from t_singlechoice s,
+		t_teacher t,t_singlechoices sc where s.teacher_id = t.teacher_ID 
+		<if test="singleChoice_question != null and singleChoice_question !=''">
+			and s.singleChoice_question = #{singleChoice_question}
+		</if>
+		<if test="stage != null and stage !=''">
+			and s.singleChoice_stage like #{stage}
+		</if>
+		<if test="1 == 1">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(s.teacher_id) as num from t_singlechoice s, t_teacher t where s.teacher_id = t.teacher_id
+	</select>
+	
+</mapper>

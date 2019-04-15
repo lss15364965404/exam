@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.ICheckDao">
+	<!-- 插入判断题  -->
+	<insert id="insert"> 
+		insert into t_check(teacher_id,check_question,check_answer,
+		check_stage,check_useNum,check_rightNum,check_accuracy)VALUES
+		(#{teacher_id},#{check_question},#{check_answer},#{check_stage},#{check_useNum},
+		#{check_rightNum},#{check_accuracy});
+	</insert>
+	
+	
+	
+	<!-- 根据条件查询判断题 -->
+	<select id="selectCkByCondition" resultType="Check">
+		select c.teacher_id,t.teacher_name,c.check_id,c.check_question,c.check_answer,c.check_stage,c.check_useNum,c.check_rightNum,c.check_accuracy 
+		from t_check c,t_teacher t 
+		where t.teacher_id = c.teacher_id
+		<if test="stem != null and stem !=''">
+			and c.check_question like #{stem}
+		</if>
+		<if test="stage != null and stage !=''">
+			and c.check_stage like #{stage}
+		</if>
+		<if test="1 == 1">
+		 	limit #{page},#{limit}
+		</if>
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(t_check.teacher_id) as num from t_check , t_teacher t where t_check.teacher_id = t.teacher_id
+	</select>
+</mapper>

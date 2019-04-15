@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ychs.dao.IClassDao">
+	<!-- 插入班级数据  -->
+	<insert id="insert">
+		INSERT INTO t_class(class_name) VALUES(#{class_name});
+	</insert>
+	
+	<!-- 根据条件查询班级数据 -->
+	<select id="selectClassByCondition" resultType="Class">
+		SELECT class_id,class_name
+		FROM t_class WHERE 1=1
+		<if test="class_name != null and class_name != '%%'">
+			and class_name like #{class_name}
+		</if>
+		<if test="page != null and page !='' and limit != null and limit !=''">
+		 	limit #{page},#{limit}
+		</if>
+		
+	</select>
+	
+	<!-- 查询有多少条记录  -->
+	<select id="selectCount" resultType="java.lang.Integer">
+		SELECT COUNT(class_name) as num from t_class;
+	</select>
+	
+	<!-- 查询本班学生数目  -->
+	<select id="selectStudentNum" resultType="java.lang.Integer">
+		SELECT COUNT(s.student_id) FROM t_student s,t_class c 
+		where s.class_id = c.class_id
+		<if test="class_name != null and class_name != '%%'">
+			and c.class_name = #{class_name}
+		</if>
+	</select>
+</mapper>
